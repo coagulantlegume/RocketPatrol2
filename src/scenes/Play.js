@@ -38,9 +38,9 @@ class Play extends Phaser.Scene {
         'spaceship', 0, 10).setOrigin(0, 0);
 
         // define keyboard keys
-        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         
         // animation config
         this.anims.create({
@@ -73,11 +73,11 @@ class Play extends Phaser.Scene {
 
         // 60-second play clock
         scoreConfig.fixedWidth = 0;
-        this.clock = this.time.delayedCall(10000, () => {
+        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width / 2, game.config.height / 2,
                 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width / 2, game.config.height / 2 + 64,
-                '(SPACE) to Restart', scoreConfig).setOrigin(0.5);
+                '(F)ire to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
     }
@@ -86,6 +86,9 @@ class Play extends Phaser.Scene {
         // check key input for restart
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
             this.scene.restart(this.p1Score);
+        }
+        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyLeft)) {
+            this.scene.start("menuScene");
         }
 
         // scroll starfield
